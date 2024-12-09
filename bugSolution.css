@@ -1,0 +1,58 @@
+To resolve the inconsistent focus styles, we need to ensure that the `:focus-visible` style takes precedence and removes any potential conflicts with the default or `:focus` styles. This can be accomplished by several methods:
+
+**Method 1: Specificity and Order:**
+
+Ensure the `.my-element:focus-visible` rule is declared *after* the `.my-element:focus` rule and use more specific selectors if needed to prioritize the `:focus-visible` styles.
+
+```css
+.my-element {
+  outline: none;
+}
+
+.my-element:focus {
+  box-shadow: 0 0 0 4px red;
+}
+
+.my-element:focus-visible {
+  box-shadow: 0 0 0 6px green !important; /* Using !important as a last resort */
+}
+```
+
+**Method 2:  Using a single :focus rule with conditional logic (JavaScript required):**
+This method involves using JavaScript to detect focus via keyboard and then applying a different class that overrides the CSS. It requires JavaScript, which is generally a superior solution over trying to solely fix the issue with CSS alone.
+
+```javascript
+//Add this Javascript to detect if focus was triggered by a keyboard
+//This solution is not only more robust but also a better accessibility practice
+
+document.addEventListener('focusin', (event) => {
+  if (event.target.matches('.my-element')) {
+    if (document.activeElement === event.target && event.relatedTarget === null) {
+      //Focus from keyboard or other assistive technology
+      event.target.classList.add('focus-visible');
+    } 
+  }
+});
+
+document.addEventListener('focusout', (event) => {
+  if (event.target.matches('.my-element')) {
+    event.target.classList.remove('focus-visible');
+  }
+});
+
+```
+
+```css
+.my-element {
+  outline: none;
+}
+
+.my-element:focus {
+  box-shadow: 0 0 0 4px red; 
+}
+
+.my-element.focus-visible {
+  box-shadow: 0 0 0 6px green;
+}
+```
+Choose the approach that best fits your project's complexity and requirements.  The JavaScript-based solution is generally preferred for its robustness and improved accessibility practices.
