@@ -1,0 +1,18 @@
+The following CSS code snippet demonstrates an uncommon error related to the usage of the `:focus-visible` pseudo-class, which is intended to improve the user experience by only showing focus indicators when the user is actually using a keyboard or other assistive technology to navigate the page.  The bug lies in the unexpected behavior when applied to an element with other focus styles already defined, making focus states appear inconsistent and potentially confusing to the user. 
+
+```css
+.my-element {
+  outline: none; /* Removes default focus outline */
+  box-shadow: 0 0 0 2px blue; /* Custom focus visual */
+}
+
+.my-element:focus {
+  box-shadow: 0 0 0 4px red; /* Enhanced focus */
+}
+
+.my-element:focus-visible {
+  box-shadow: 0 0 0 6px green; /* Additional focus on keyboard focus */
+}
+```
+
+The issue is that even with the `outline: none` declaration to remove default browser focus styles, the `:focus` state still shows a subtle default focus outline in some browsers or screen readers which interferes with the custom box-shadow styles, and when combined with `:focus-visible` it can lead to an unexpected visual result of having multiple focus states overlapping or competing for visual prominence.
